@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 HOTWAR 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #0a0f1e;
+    --card: #0d1526;
+    --card2: #111a30;
+    --border: #1e3a5f;
+    --accent1: #00d4ff;
+    --accent2: #7b2fff;
+    --accent3: #ff2d78;
+    --accent4: #00ff88;
+    --text: #e0eaff;
+    --muted: #6a85b0;
+    --gold: #ffd700;
+    --glow1: 0 0 20px rgba(0,212,255,0.4);
+    --glow2: 0 0 20px rgba(123,47,255,0.4);
+    --glow3: 0 0 20px rgba(255,45,120,0.4);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background: radial-gradient(ellipse at 20% 20%, rgba(0,212,255,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(123,47,255,0.04) 0%, transparent 60%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius:3px; }
+
+  /* ── TOAST ── */
+  #toast-container {
+    position:fixed; top:80px; right:20px; z-index:9999;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .toast {
+    background: linear-gradient(135deg, var(--card2), var(--bg2));
+    border:1px solid var(--accent1);
+    border-radius:10px;
+    padding:12px 20px;
+    font-size:14px;
+    color: var(--accent1);
+    box-shadow: var(--glow1);
+    animation: slideIn .3s ease, fadeOut .4s 3.6s forwards;
+    max-width:320px;
+  }
+  @keyframes slideIn { from { transform:translateX(120%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+  @keyframes fadeOut { to { opacity:0; transform:translateX(120%); } }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top:0; z-index:100;
+    background: rgba(5,8,16,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px; font-weight:900;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: 3px;
+    text-shadow: none;
+  }
+  .header-right { display:flex; align-items:center; gap:12px; }
+  .search-box {
+    display:flex; align-items:center;
+    background: var(--card2); border:1px solid var(--border);
+    border-radius:25px; padding:6px 16px; gap:8px;
+    transition:.3s;
+  }
+  .search-box:focus-within { border-color: var(--accent1); box-shadow: var(--glow1); }
+  .search-box input {
+    background:none; border:none; outline:none;
+    color: var(--text); font-family: 'Rajdhani',sans-serif; font-size:14px;
+    width:180px;
+  }
+  .search-box svg { color: var(--muted); flex-shrink:0; }
+  .btn {
+    padding:8px 18px; border-radius:20px; border:none; cursor:pointer;
+    font-family:'Rajdhani',sans-serif; font-weight:700; font-size:13px;
+    transition:.3s; letter-spacing:1px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent2), var(--accent1));
+    color:#fff; box-shadow: var(--glow2);
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow: 0 0 30px rgba(123,47,255,0.6); }
+  .btn-danger { background: linear-gradient(135deg,#c0392b,var(--accent3)); color:#fff; }
+  .btn-ghost {
+    background:transparent; border:1px solid var(--border); color:var(--muted);
+  }
+  .btn-ghost:hover { border-color:var(--accent1); color:var(--accent1); }
+  .avatar-sm {
+    width:36px; height:36px; border-radius:50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent1));
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:13px; cursor:pointer;
+    border:2px solid var(--accent1);
+  }
+
+  /* ── NAV TABS ── */
+  nav.tabs {
+    display:flex; gap:4px;
+    padding:16px 24px 0;
+    border-bottom:1px solid var(--border);
+    overflow-x:auto; position:relative; z-index:1;
+  }
+  nav.tabs::-webkit-scrollbar { height:0; }
+  .tab {
+    padding:10px 20px; border-radius:10px 10px 0 0;
+    border:1px solid transparent; border-bottom:none;
+    background:none; color:var(--muted);
+    font-family:'Rajdhani',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; white-space:nowrap; transition:.2s;
+    letter-spacing:1px;
+  }
+  .tab:hover { color:var(--text); }
+  .tab.active {
+    background: var(--card); border-color: var(--border);
+    color:var(--accent1);
+    box-shadow: 0 0 15px rgba(0,212,255,0.15);
+  }
+  .tab-icon { margin-right:6px; }
+
+  /* ── MAIN ── */
+  main { padding:24px; max-width:1100px; margin:0 auto; position:relative; z-index:1; }
+  .section { display:none; }
+  .section.active { display:block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:24px; flex-wrap:wrap; gap:12px;
+  }
+  .section-title {
+    font-family:'Orbitron',sans-serif; font-size:20px; font-weight:700;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    display:flex; align-items:center; gap:10px;
+  }
+
+  /* ── GRID CARDS ── */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+
+  .person-card {
+    background: var(--card);
+    border:1px solid var(--border);
+    border-radius:16px; overflow:hidden;
+    transition:.3s; position:relative;
+  }
+  .person-card:hover {
+    transform:translateY(-4px);
+    border-color: var(--accent1);
+    box-shadow: var(--glow1);
+  }
+  .person-card-img {
+    width:100%; height:180px; object-fit:cover;
+    background: linear-gradient(135deg, var(--card2), var(--bg2));
+    display:flex; align-items:center; justify-content:center;
+    font-size:60px; color:var(--muted);
+    overflow:hidden;
+  }
+  .person-card-img img { width:100%; height:100%; object-fit:cover; }
+  .person-card-body { padding:16px; }
+  .person-name {
+    font-family:'Orbitron',sans-serif; font-size:14px; font-weight:700;
+    color:var(--accent1); margin-bottom:6px;
+  }
+  .person-info { font-size:13px; color:var(--muted); line-height:1.6; }
+  .person-card-actions {
+    padding:12px 16px; border-top:1px solid var(--border);
+    display:flex; align-items:center; gap:12px;
+  }
+  .like-btn {
+    background:none; border:none; cursor:pointer;
+    color:var(--muted); font-size:13px; font-family:'Rajdhani',sans-serif;
+    display:flex; align-items:center; gap:5px; transition:.2s;
+  }
+  .like-btn:hover, .like-btn.liked { color:var(--accent3); }
+  .comment-btn {
+    background:none; border:none; cursor:pointer;
+    color:var(--muted); font-size:13px; font-family:'Rajdhani',sans-serif;
+    display:flex; align-items:center; gap:5px; transition:.2s;
+    margin-left:auto;
+  }
+  .comment-btn:hover { color:var(--accent1); }
+  .delete-btn-card {
+    background:none; border:none; cursor:pointer;
+    color:var(--accent3); font-size:12px; font-family:'Rajdhani',sans-serif;
+    margin-left:auto; transition:.2s;
+  }
+  .delete-btn-card:hover { color:#ff0055; }
+
+  /* ── HOT TAGS ── */
+  .hot-section {
+    background: var(--card);
+    border:1px solid var(--border);
+    border-radius:16px; padding:20px; margin-bottom:24px;
+  }
+  .hot-section-title {
+    font-family:'Orbitron',sans-serif; font-size:16px; font-weight:700;
+    margin-bottom:16px; display:flex; align-items:center; gap:8px;
+  }
+  .hot-mic { color: var(--accent1); }
+  .hot-go { color: var(--accent2); }
+  .hot-treo { color: var(--accent3); }
+  .hot-content {
+    color: var(--text); font-size:15px; line-height:1.7;
+    white-space:pre-wrap;
+    min-height:40px;
+  }
+  .hot-edit-area {
+    display:none; margin-top:12px;
+  }
+  .hot-edit-area textarea {
+    width:100%; background:var(--bg2); border:1px solid var(--border);
+    border-radius:8px; padding:10px; color:var(--text);
+    font-family:'Rajdhani',sans-serif; font-size:14px;
+    resize:vertical; min-height:80px; outline:none;
+  }
+  .hot-edit-area textarea:focus { border-color:var(--accent1); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.75); backdrop-filter:blur(8px);
+    z-index:500; align-items:center; justify-content:center;
+  }
+  .modal-overlay.show { display:flex; }
+  .modal {
+    background: var(--card); border:1px solid var(--border);
+    border-radius:20px; padding:32px; width:100%; max-width:480px;
+    max-height:90vh; overflow-y:auto;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    position:relative;
+    animation: modalIn .3s ease;
+  }
+  @keyframes modalIn { from { transform:scale(.9); opacity:0; } to { transform:scale(1); opacity:1; } }
+  .modal h2 {
+    font-family:'Orbitron',sans-serif; font-size:18px; font-weight:700;
+    color:var(--accent1); margin-bottom:24px; text-align:center;
+  }
+  .modal-close {
+    position:absolute; top:16px; right:16px;
+    background:none; border:none; cursor:pointer;
+    color:var(--muted); font-size:20px; transition:.2s;
+  }
+  .modal-close:hover { color:var(--accent3); }
+  .form-group { margin-bottom:16px; }
+  .form-group label {
+    display:block; font-size:13px; color:var(--muted);
+    margin-bottom:6px; letter-spacing:1px; font-weight:600;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    width:100%; background:var(--bg2); border:1px solid var(--border);
+    border-radius:10px; padding:10px 14px; color:var(--text);
+    font-family:'Rajdhani',sans-serif; font-size:14px; outline:none;
+    transition:.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color:var(--accent1); box-shadow: var(--glow1);
+  }
+  .form-group textarea { resize:vertical; min-height:80px; }
+  .img-preview {
+    width:100%; height:160px; border-radius:10px;
+    background:var(--bg2); border:2px dashed var(--border);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; overflow:hidden; position:relative; transition:.2s;
+    margin-top:8px;
+  }
+  .img-preview:hover { border-color:var(--accent1); }
+  .img-preview img { width:100%; height:100%; object-fit:cover; }
+  .img-preview-text { color:var(--muted); font-size:13px; text-align:center; }
+  .error-msg { color:var(--accent3); font-size:12px; margin-top:8px; display:none; }
+
+  /* ── COMMENTS ── */
+  .comments-section { margin-top:12px; }
+  .comment-list { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; max-height:200px; overflow-y:auto; }
+  .comment-item {
+    background:var(--bg2); border-radius:10px; padding:10px 14px;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .comment-av {
+    width:28px; height:28px; border-radius:50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; flex-shrink:0;
+  }
+  .comment-content { flex:1; }
+  .comment-user { font-size:12px; color:var(--accent1); font-weight:700; }
+  .comment-text { font-size:13px; color:var(--text); margin-top:2px; }
+  .comment-input-row { display:flex; gap:8px; }
+  .comment-input-row input {
+    flex:1; background:var(--bg2); border:1px solid var(--border);
+    border-radius:20px; padding:8px 14px; color:var(--text);
+    font-family:'Rajdhani',sans-serif; font-size:13px; outline:none;
+    transition:.2s;
+  }
+  .comment-input-row input:focus { border-color:var(--accent1); }
+  .comment-send {
+    background: linear-gradient(135deg, var(--accent2), var(--accent1));
+    border:none; border-radius:20px; padding:8px 14px;
+    color:#fff; cursor:pointer; font-size:13px; font-family:'Rajdhani',sans-serif;
+    font-weight:700; transition:.2s;
+  }
+  .comment-send:hover { transform:scale(1.05); }
+
+  /* ── NOTI WAR ── */
+  .noti-card {
+    background: var(--card); border:1px solid var(--border);
+    border-radius:16px; overflow:hidden; margin-bottom:20px;
+    transition:.3s;
+  }
+  .noti-card:hover { border-color:var(--accent3); box-shadow:var(--glow3); }
+  .noti-card-img {
+    width:100%; height:200px; object-fit:cover;
+    background:var(--bg2); display:flex; align-items:center; justify-content:center;
+    font-size:50px; overflow:hidden;
+  }
+  .noti-card-img img { width:100%; height:100%; object-fit:cover; }
+  .noti-card-body { padding:16px; }
+  .noti-tag {
+    display:inline-block; padding:3px 10px; border-radius:20px;
+    background:rgba(255,45,120,0.15); color:var(--accent3);
+    font-size:11px; font-weight:700; letter-spacing:2px; margin-bottom:10px;
+  }
+  .noti-name {
+    font-family:'Orbitron',sans-serif; font-size:16px; font-weight:700;
+    color:var(--text); margin-bottom:8px;
+  }
+  .noti-desc { font-size:14px; color:var(--muted); line-height:1.6; }
+  .noti-footer {
+    padding:12px 16px; border-top:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:12px; color:var(--muted);
+  }
+
+  /* ── ĐỌ DANH ── */
+  .duel-card {
+    background: var(--card); border:1px solid var(--border);
+    border-radius:20px; overflow:hidden; margin-bottom:24px;
+  }
+  .duel-header {
+    padding:16px 20px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .duel-title {
+    font-family:'Orbitron',sans-serif; font-size:15px; font-weight:700;
+    color:var(--gold);
+  }
+  .duel-timer {
+    font-family:'Share Tech Mono',monospace; font-size:14px;
+    color:var(--accent1); background:rgba(0,212,255,0.1);
+    padding:4px 12px; border-radius:20px; border:1px solid rgba(0,212,255,0.3);
+  }
+  .duel-arena {
+    display:grid; grid-template-columns:1fr auto 1fr;
+    align-items:center; padding:24px; gap:16px;
+  }
+  .duel-side { text-align:center; }
+  .duel-avatar {
+    width:100px; height:100px; border-radius:50%;
+    object-fit:cover; border:3px solid;
+    margin:0 auto 12px; display:block;
+    background:var(--bg2); overflow:hidden;
+  }
+  .duel-side.left .duel-avatar { border-color: var(--accent1); }
+  .duel-side.right .duel-avatar { border-color: var(--accent3); }
+  .duel-avatar-img { width:100%; height:100%; object-fit:cover; }
+  .duel-pname {
+    font-family:'Orbitron',sans-serif; font-size:13px; font-weight:700;
+    margin-bottom:6px;
+  }
+  .duel-side.left .duel-pname { color:var(--accent1); }
+  .duel-side.right .duel-pname { color:var(--accent3); }
+  .duel-votes {
+    font-size:24px; font-weight:700;
+    font-family:'Orbitron',sans-serif;
+  }
+  .duel-side.left .duel-votes { color:var(--accent1); }
+  .duel-side.right .duel-votes { color:var(--accent3); }
+  .duel-vs {
+    font-family:'Orbitron',sans-serif; font-size:22px; font-weight:900;
+    background:linear-gradient(180deg,var(--accent1),var(--accent3));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .duel-vote-btn {
+    display:block; width:100%; margin-top:10px; padding:8px;
+    border-radius:10px; border:none; cursor:pointer;
+    font-family:'Rajdhani',sans-serif; font-weight:700; font-size:13px;
+    transition:.2s;
+  }
+  .duel-side.left .duel-vote-btn {
+    background:rgba(0,212,255,0.15); color:var(--accent1);
+    border:1px solid rgba(0,212,255,0.4);
+  }
+  .duel-side.right .duel-vote-btn {
+    background:rgba(255,45,120,0.15); color:var(--accent3);
+    border:1px solid rgba(255,45,120,0.4);
+  }
+  .duel-vote-btn:hover { transform:scale(1.05); }
+  .duel-vote-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+  .duel-progress {
+    height:8px; background:var(--bg2);
+    display:flex; overflow:hidden;
+  }
+  .duel-bar-left { background:var(--accent1); transition:width .5s; }
+  .duel-bar-right { background:var(--accent3); flex:1; transition:width .5s; }
+  .duel-fb-link {
+    display:inline-block; font-size:11px; color:var(--muted);
+    text-decoration:none; margin-top:4px; transition:.2s;
+  }
+  .duel-fb-link:hover { color:var(--accent1); }
+
+  /* ── AUTH ── */
+  .auth-tabs { display:flex; gap:8px; margin-bottom:20px; }
+  .auth-tab {
+    flex:1; padding:10px; border-radius:10px; border:1px solid var(--border);
+    background:none; color:var(--muted); cursor:pointer;
+    font-family:'Rajdhani',sans-serif; font-weight:700; transition:.2s;
+  }
+  .auth-tab.active { background:var(--accent2); color:#fff; border-color:var(--accent2); }
+
+  /* ── BADGE ── */
+  .badge {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; border-radius:50%;
+    background:var(--accent3); color:#fff;
+    font-size:10px; font-weight:700; margin-left:4px;
+  }
+
+  /* ── EMPTY ── */
+  .empty {
+    text-align:center; padding:48px; color:var(--muted);
+    font-size:14px;
+  }
+  .empty-icon { font-size:48px; margin-bottom:12px; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:640px) {
+    header { padding:0 12px; }
+    .search-box input { width:120px; }
+    main { padding:16px; }
+    nav.tabs { padding:12px 12px 0; }
+    .tab { padding:8px 12px; font-size:12px; }
+    .duel-arena { padding:16px 8px; }
+    .duel-avatar { width:72px; height:72px; }
+  }
+
+  /* ── PULSE ── */
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.5} }
+  .live-dot {
+    width:8px; height:8px; border-radius:50%;
+    background:var(--accent4); display:inline-block;
+    animation:pulse 1.5s infinite; margin-right:6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">🔥 HOTWAR 2026</div>
+  <div class="header-right">
+    <div class="search-box">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Tìm kiếm..." oninput="doSearch()">
+    </div>
+    <div id="headerAuth">
+      <button class="btn btn-primary" onclick="openAuth()">ĐĂNG NHẬP</button>
+    </div>
+  </div>
+</header>
+
+<!-- NAV TABS -->
+<nav class="tabs">
+  <button class="tab active" onclick="switchTab('danh-sach')"><span class="tab-icon">📋</span>DANH SÁCH</button>
+  <button class="tab" onclick="switchTab('hot-mic')"><span class="tab-icon">🎙️</span>HOT MIC</button>
+  <button class="tab" onclick="switchTab('hot-go')"><span class="tab-icon">⌨️</span>HOT GÕ</button>
+  <button class="tab" onclick="switchTab('hot-treo')"><span class="tab-icon">🪝</span>HOT TREO</button>
+  <button class="tab" onclick="switchTab('noti-war')"><span class="tab-icon">📣</span>NOTI WAR</button>
+  <button class="tab" onclick="switchTab('do-danh')"><span class="tab-icon">⚔️</span>ĐỌ DANH</button>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- DANH SÁCH -->
+  <div class="section active" id="tab-danh-sach">
+    <div class="section-header">
+      <div class="section-title">📋 DANH SÁCH HOTWAR</div>
+      <button class="btn btn-primary" id="addPersonBtn" onclick="openAddPerson()" style="display:none">+ THÊM NGƯỜI</button>
+    </div>
+    <div class="grid" id="personGrid"></div>
+    <div class="empty" id="personEmpty"><div class="empty-icon">👥</div>Chưa có ai trong danh sách</div>
+  </div>
+
+  <!-- HOT MIC -->
+  <div class="section" id="tab-hot-mic">
+    <div class="section-header">
+      <div class="section-title hot-mic">🎙️ HOT MIC</div>
+      <button class="btn btn-primary" id="editMicBtn" onclick="toggleHotEdit('mic')" style="display:none">✏️ CHỈNH SỬA</button>
+    </div>
+    <div class="hot-section">
+      <div class="hot-section-title hot-mic">🎙️ NHỮNG CAI MIC HOT NHẤT</div>
+      <div class="hot-content" id="hotMicContent">Chưa có nội dung.</div>
+      <div class="hot-edit-area" id="hotMicEdit">
+        <textarea id="hotMicText" placeholder="Nhập nội dung Hot Mic..."></textarea>
+        <button class="btn btn-primary" style="margin-top:8px" onclick="saveHot('mic')">💾 LƯU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOT GÕ -->
+  <div class="section" id="tab-hot-go">
+    <div class="section-header">
+      <div class="section-title hot-go">⌨️ HOT GÕ</div>
+      <button class="btn btn-primary" id="editGoBtn" onclick="toggleHotEdit('go')" style="display:none">✏️ CHỈNH SỬA</button>
+    </div>
+    <div class="hot-section">
+      <div class="hot-section-title hot-go">⌨️ NHỮNG CAI GÕ HOT NHẤT</div>
+      <div class="hot-content" id="hotGoContent">Chưa có nội dung.</div>
+      <div class="hot-edit-area" id="hotGoEdit">
+        <textarea id="hotGoText" placeholder="Nhập nội dung Hot Gõ..."></textarea>
+        <button class="btn btn-primary" style="margin-top:8px" onclick="saveHot('go')">💾 LƯU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOT TREO -->
+  <div class="section" id="tab-hot-treo">
+    <div class="section-header">
+      <div class="section-title hot-treo">🪝 HOT TREO</div>
+      <button class="btn btn-primary" id="editTreoBtn" onclick="toggleHotEdit('treo')" style="display:none">✏️ CHỈNH SỬA</button>
+    </div>
+    <div class="hot-section">
+      <div class="hot-section-title hot-treo">🪝 NHỮNG CAI TREO HOT NHẤT</div>
+      <div class="hot-content" id="hotTreoContent">Chưa có nội dung.</div>
+      <div class="hot-edit-area" id="hotTreoEdit">
+        <textarea id="hotTreoText" placeholder="Nhập nội dung Hot Treo..."></textarea>
+        <button class="btn btn-primary" style="margin-top:8px" onclick="saveHot('treo')">💾 LƯU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTI WAR -->
+  <div class="section" id="tab-noti-war">
+    <div class="section-header">
+      <div class="section-title">📣 NOTI WAR</div>
+      <button class="btn btn-primary" id="addNotiBtn" onclick="openAddNoti()">+ ĐĂNG NOTI</button>
+    </div>
+    <div id="notiGrid"></div>
+    <div class="empty" id="notiEmpty"><div class="empty-icon">📣</div>Chưa có noti nào</div>
+  </div>
+
+  <!-- ĐỌ DANH -->
+  <div class="section" id="tab-do-danh">
+    <div class="section-header">
+      <div class="section-title">⚔️ ĐỌ DANH</div>
+      <button class="btn btn-primary" id="addDuelBtn" onclick="openAddDuel()">+ TẠO ĐỌ DANH</button>
+    </div>
+    <div id="duelGrid"></div>
+    <div class="empty" id="duelEmpty"><div class="empty-icon">⚔️</div>Chưa có trận đấu nào</div>
+  </div>
+
+</main>
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    <h2 id="authTitle">🔐 ĐĂNG NHẬP</h2>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTabBtn" onclick="switchAuthTab('login')">ĐĂNG NHẬP</button>
+      <button class="auth-tab" id="registerTabBtn" onclick="switchAuthTab('register')">ĐĂNG KÝ</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <div class="form-group"><label>TÀI KHOẢN</label><input type="text" id="loginUser" placeholder="Tên đăng nhập"></div>
+      <div class="form-group"><label>MẬT KHẨU</label><input type="password" id="loginPass" placeholder="Mật khẩu"></div>
+      <div class="error-msg" id="loginErr">Tài khoản hoặc mật khẩu không đúng</div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="doLogin()">ĐĂNG NHẬP</button>
+    </div>
+    <!-- REGISTER -->
+    <div id="registerForm" style="display:none">
+      <div class="form-group"><label>TÊN HIỂN THỊ</label><input type="text" id="regName" placeholder="Tên của bạn"></div>
+      <div class="form-group"><label>TÀI KHOẢN</label><input type="text" id="regUser" placeholder="Tên đăng nhập"></div>
+      <div class="form-group"><label>MẬT KHẨU</label><input type="password" id="regPass" placeholder="Mật khẩu (≥6 ký tự)"></div>
+      <div class="error-msg" id="regErr">Lỗi đăng ký</div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="doRegister()">ĐĂNG KÝ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PERSON MODAL -->
+<div class="modal-overlay" id="addPersonModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('addPersonModal')">✕</button>
+    <h2>👤 THÊM NGƯỜI</h2>
+    <div class="form-group">
+      <label>ẢNH ĐẠI DIỆN</label>
+      <div class="img-preview" onclick="document.getElementById('personImgInput').click()">
+        <div class="img-preview-text" id="personImgPreviewText">📷 Nhấn để chọn ảnh</div>
+        <img id="personImgPreview" style="display:none">
+      </div>
+      <input type="file" id="personImgInput" accept="image/*" style="display:none" onchange="previewImg('personImgInput','personImgPreview','personImgPreviewText')">
+    </div>
+    <div class="form-group"><label>TÊN</label><input type="text" id="personName" placeholder="Tên người cần liệt kê"></div>
+    <div class="form-group"><label>THÔNG TIN</label><textarea id="personInfo" placeholder="Thông tin, lý do, ghi chú..."></textarea></div>
+    <button class="btn btn-primary" style="width:100%" onclick="addPerson()">🔥 ĐĂNG BÀI</button>
+  </div>
+</div>
+
+<!-- COMMENT MODAL -->
+<div class="modal-overlay" id="commentModal">
+  <div class="modal" style="max-width:500px">
+    <button class="modal-close" onclick="closeModal('commentModal')">✕</button>
+    <h2>💬 BÌNH LUẬN</h2>
+    <div class="comments-section">
+      <div class="comment-list" id="commentList"></div>
+      <div id="commentInputArea">
+        <div class="comment-input-row">
+          <input type="text" id="commentInput" placeholder="Viết bình luận..." onkeydown="if(event.key==='Enter')sendComment()">
+          <button class="comment-send" onclick="sendComment()">GỬI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD NOTI MODAL -->
+<div class="modal-overlay" id="addNotiModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('addNotiModal')">✕</button>
+    <h2>📣 ĐĂNG NOTI WAR</h2>
+    <div class="form-group">
+      <label>ẢNH</label>
+      <div class="img-preview" onclick="document.getElementById('notiImgInput').click()">
+        <div class="img-preview-text" id="notiImgPreviewText">📷 Nhấn để chọn ảnh</div>
+        <img id="notiImgPreview" style="display:none">
+      </div>
+      <input type="file" id="notiImgInput" accept="image/*" style="display:none" onchange="previewImg('notiImgInput','notiImgPreview','notiImgPreviewText')">
+    </div>
+    <div class="form-group"><label>TÊN NGƯỜI BỊ NOTI</label><input type="text" id="notiName" placeholder="Tên người bị noti"></div>
+    <div class="form-group"><label>NỘI DUNG NOTI</label><textarea id="notiDesc" placeholder="Lý do noti, thông tin..."></textarea></div>
+    <button class="btn btn-primary" style="width:100%" onclick="addNoti()">📣 ĐĂNG NOTI</button>
+  </div>
+</div>
+
+<!-- ADD DUEL MODAL -->
+<div class="modal-overlay" id="addDuelModal">
+  <div class="modal" style="max-width:540px">
+    <button class="modal-close" onclick="closeModal('addDuelModal')">✕</button>
+    <h2>⚔️ TẠO TRẬN ĐỌ DANH</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <p style="color:var(--accent1);font-weight:700;margin-bottom:10px;font-size:13px">⚡ NGƯỜI 1</p>
+        <div class="form-group">
+          <label>ẢNH</label>
+          <div class="img-preview" style="height:100px" onclick="document.getElementById('duel1Img').click()">
+            <div class="img-preview-text" id="duel1ImgText">📷</div>
+            <img id="duel1Preview" style="display:none">
+          </div>
+          <input type="file" id="duel1Img" accept="image/*" style="display:none" onchange="previewImg('duel1Img','duel1Preview','duel1ImgText')">
+        </div>
+        <div class="form-group"><label>TÊN</label><input type="text" id="duel1Name" placeholder="Tên người 1"></div>
+        <div class="form-group"><label>LINK FB</label><input type="text" id="duel1Fb" placeholder="https://facebook.com/..."></div>
+      </div>
+      <div>
+        <p style="color:var(--accent3);font-weight:700;margin-bottom:10px;font-size:13px">🔥 NGƯỜI 2</p>
+        <div class="form-group">
+          <label>ẢNH</label>
+          <div class="img-preview" style="height:100px" onclick="document.getElementById('duel2Img').click()">
+            <div class="img-preview-text" id="duel2ImgText">📷</div>
+            <img id="duel2Preview" style="display:none">
+          </div>
+          <input type="file" id="duel2Img" accept="image/*" style="display:none" onchange="previewImg('duel2Img','duel2Preview','duel2ImgText')">
+        </div>
+        <div class="form-group"><label>TÊN</label><input type="text" id="duel2Name" placeholder="Tên người 2"></div>
+        <div class="form-group"><label>LINK FB</label><input type="text" id="duel2Fb" placeholder="https://facebook.com/..."></div>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="addDuel()">⚔️ BẮT ĐẦU TRẬN</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  DATA STORE (localStorage)
+// ══════════════════════════════════════
+const ADMIN = { username:'Saikydz1237', password:'12345' };
+
+function load(key, def) {
+  try { return JSON.parse(localStorage.getItem(key)) || def; } catch{ return def; }
+}
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+let state = {
+  currentUser: load('hw_user', null),
+  persons:     load('hw_persons', []),
+  notis:       load('hw_notis', []),
+  duels:       load('hw_duels', []),
+  users:       load('hw_users', []),
+  hots:        load('hw_hots', { mic:'', go:'', treo:'' }),
+};
+
+// ══════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════
+function isAdmin() {
+  return state.currentUser && state.currentUser.username === ADMIN.username;
+}
+function isLoggedIn() { return !!state.currentUser; }
+
+function updateHeaderAuth() {
+  const el = document.getElementById('headerAuth');
+  if (!state.currentUser) {
+    el.innerHTML = `<button class="btn btn-primary" onclick="openAuth()">ĐĂNG NHẬP</button>`;
+  } else {
+    const isAd = isAdmin();
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px">
+        ${isAd ? '<span style="color:var(--gold);font-size:12px;font-weight:700">👑 ADMIN</span>' : ''}
+        <span style="color:var(--muted);font-size:13px">${state.currentUser.displayName || state.currentUser.username}</span>
+        <div class="avatar-sm" title="Đăng xuất" onclick="doLogout()">${(state.currentUser.displayName||state.currentUser.username)[0].toUpperCase()}</div>
+      </div>`;
+  }
+  // show/hide admin buttons
+  document.getElementById('addPersonBtn').style.display = isAdmin() ? '' : 'none';
+  document.getElementById('editMicBtn').style.display = isAdmin() ? '' : 'none';
+  document.getElementById('editGoBtn').style.display = isAdmin() ? '' : 'none';
+  document.getElementById('editTreoBtn').style.display = isAdmin() ? '' : 'none';
+  // noti & duel available to all logged-in
+  document.getElementById('addNotiBtn').style.display = isLoggedIn() ? '' : 'none';
+  document.getElementById('addDuelBtn').style.display = isLoggedIn() ? '' : 'none';
+}
+
+function openAuth() { openModal('authModal'); }
+function switchAuthTab(t) {
+  document.getElementById('loginForm').style.display = t==='login'?'':'none';
+  document.getElementById('registerForm').style.display = t==='register'?'':'none';
+  document.getElementById('loginTabBtn').classList.toggle('active', t==='login');
+  document.getElementById('registerTabBtn').classList.toggle('active', t==='register');
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  // check admin
+  if (u === ADMIN.username && p === ADMIN.password) {
+    state.currentUser = { username: ADMIN.username, displayName:'Admin', isAdmin:true };
+    save('hw_user', state.currentUser);
+    closeModal('authModal');
+    toast('👑 Xin chào Admin!');
+    updateHeaderAuth(); renderAll();
+    return;
+  }
+  // check normal users
+  const found = state.users.find(x => x.username===u && x.password===p);
+  if (found) {
+    state.currentUser = found;
+    save('hw_user', found);
+    closeModal('authModal');
+    toast(`👋 Xin chào ${found.displayName||found.username}!`);
+    updateHeaderAuth(); renderAll();
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+  }
+}
+
+function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const u    = document.getElementById('regUser').value.trim();
+  const p    = document.getElementById('regPass').value;
+  const errEl = document.getElementById('regErr');
+  if (!name||!u||!p) { errEl.textContent='Vui lòng điền đầy đủ'; errEl.style.display='block'; return; }
+  if (p.length < 6)  { errEl.textContent='Mật khẩu ≥ 6 ký tự'; errEl.style.display='block'; return; }
+  if (u === ADMIN.username) { errEl.textContent='Tên này không khả dụng'; errEl.style.display='block'; return; }
+  if (state.users.find(x=>x.username===u)) { errEl.textContent='Tên đăng nhập đã tồn tại'; errEl.style.display='block'; return; }
+  const user = { username:u, displayName:name, password:p };
+  state.users.push(user);
+  save('hw_users', state.users);
+  state.currentUser = user;
+  save('hw_user', user);
+  closeModal('authModal');
+  toast(`🎉 Đăng ký thành công! Xin chào ${name}!`);
+  updateHeaderAuth(); renderAll();
+}
+
+function doLogout() {
+  state.currentUser = null;
+  localStorage.removeItem('hw_user');
+  toast('👋 Đã đăng xuất');
+  updateHeaderAuth(); renderAll();
+}
+
+// ══════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  const tabs = ['danh-sach','hot-mic','hot-go','hot-treo','noti-war','do-danh'];
+  const idx = tabs.indexOf(id);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  renderAll();
+}
+
+// ══════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════
+function doSearch() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  renderPersons(q);
+}
+
+// ══════════════════════════════════════
+//  PERSONS
+// ══════════════════════════════════════
+let personImgData = null;
+
+function openAddPerson() {
+  if (!isAdmin()) { toast('Chỉ admin mới có thể đăng bài!'); return; }
+  personImgData = null;
+  document.getElementById('personImgPreview').style.display='none';
+  document.getElementById('personImgPreviewText').style.display='';
+  document.getElementById('personName').value='';
+  document.getElementById('personInfo').value='';
+  openModal('addPersonModal');
+}
+
+function addPerson() {
+  const name = document.getElementById('personName').value.trim();
+  const info = document.getElementById('personInfo').value.trim();
+  if (!name) { toast('Vui lòng nhập tên!'); return; }
+  const person = {
+    id: Date.now(), name, info,
+    img: personImgData,
+    likes:[], comments:[], postedBy: state.currentUser.username,
+    time: new Date().toLocaleString('vi-VN')
+  };
+  state.persons.unshift(person);
+  save('hw_persons', state.persons);
+  closeModal('addPersonModal');
+  renderPersons();
+  toast(`🔥 Đã thêm "${name}" vào danh sách!`);
+}
+
+function deletePerson(id) {
+  if (!isAdmin()) return;
+  state.persons = state.persons.filter(p=>p.id!==id);
+  save('hw_persons', state.persons);
+  renderPersons();
+  toast('🗑️ Đã xóa');
+}
+
+function toggleLike(id) {
+  if (!isLoggedIn()) { toast('Đăng nhập để thích!'); openAuth(); return; }
+  const p = state.persons.find(x=>x.id===id);
+  if (!p) return;
+  const u = state.currentUser.username;
+  const idx = p.likes.indexOf(u);
+  if (idx>=0) p.likes.splice(idx,1);
+  else p.likes.push(u);
+  save('hw_persons', state.persons);
+  renderPersons();
+}
+
+function renderPersons(q='') {
+  const grid = document.getElementById('personGrid');
+  const empty = document.getElementById('personEmpty');
+  let list = state.persons;
+  if (q) list = list.filter(p=>p.name.toLowerCase().includes(q)||p.info.toLowerCase().includes(q));
+  if (!list.length) { grid.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  grid.innerHTML = list.map(p => {
+    const liked = isLoggedIn() && p.likes.includes(state.currentUser.username);
+    return `
+    <div class="person-card" id="pc-${p.id}">
+      <div class="person-card-img">
+        ${p.img ? `<img src="${p.img}" alt="${p.name}">` : '👤'}
+      </div>
+      <div class="person-card-body">
+        <div class="person-name">${p.name}</div>
+        <div class="person-info">${p.info||'Không có thông tin'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">🕐 ${p.time}</div>
+      </div>
+      <div class="person-card-actions">
+        <button class="like-btn ${liked?'liked':''}" onclick="toggleLike(${p.id})">
+          ${liked?'❤️':'🤍'} ${p.likes.length}
+        </button>
+        <button class="comment-btn" onclick="openComments(${p.id})">
+          💬 ${p.comments.length}
+        </button>
+        ${isAdmin()?`<button class="delete-btn-card" onclick="deletePerson(${p.id})">🗑️ XÓA</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+//  COMMENTS
+// ══════════════════════════════════════
+let commentingId = null;
+
+function openComments(id) {
+  commentingId = id;
+  const p = state.persons.find(x=>x.id===id);
+  if (!p) return;
+  renderCommentList(p);
+  const area = document.getElementById('commentInputArea');
+  area.style.display = isLoggedIn() ? '' : 'none';
+  if (!isLoggedIn()) {
+    if (!document.getElementById('commentLoginHint')) {
+      const hint = document.createElement('p');
+      hint.id='commentLoginHint';
+      hint.style.cssText='color:var(--muted);font-size:13px;text-align:center;margin-top:8px;cursor:pointer;';
+      hint.textContent='Đăng nhập để bình luận';
+      hint.onclick=()=>{closeModal('commentModal');openAuth();};
+      area.after(hint);
+    }
+  } else {
+    const old = document.getElementById('commentLoginHint');
+    if(old) old.remove();
+  }
+  openModal('commentModal');
+}
+
+function renderCommentList(p) {
+  const list = document.getElementById('commentList');
+  if (!p.comments.length) { list.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:16px">Chưa có bình luận</p>'; return; }
+  list.innerHTML = p.comments.map(c=>`
+    <div class="comment-item">
+      <div class="comment-av">${c.user[0].toUpperCase()}</div>
+      <div class="comment-content">
+        <div class="comment-user">${c.user}</div>
+        <div class="comment-text">${c.text}</div>
+      </div>
+    </div>`).join('');
+  list.scrollTop = list.scrollHeight;
+}
+
+function sendComment() {
+  if (!isLoggedIn()) { toast('Đăng nhập để bình luận!'); return; }
+  const input = document.getElementById('commentInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const p = state.persons.find(x=>x.id===commentingId);
+  if (!p) return;
+  p.comments.push({ user: state.currentUser.displayName||state.currentUser.username, text });
+  save('hw_persons', state.persons);
+  input.value='';
+  renderCommentList(p);
+  renderPersons();
+}
+
+// ══════════════════════════════════════
+//  HOT SECTIONS
+// ══════════════════════════════════════
+function toggleHotEdit(type) {
+  if (!isAdmin()) return;
+  const el = document.getElementById('hot'+cap(type)+'Edit');
+  const txt = document.getElementById('hot'+cap(type)+'Text');
+  const showing = el.style.display === 'block';
+  el.style.display = showing ? 'none' : 'block';
+  if (!showing) txt.value = state.hots[type];
+}
+function saveHot(type) {
+  if (!isAdmin()) return;
+  const txt = document.getElementById('hot'+cap(type)+'Text').value;
+  state.hots[type] = txt;
+  save('hw_hots', state.hots);
+  document.getElementById('hot'+cap(type)+'Content').textContent = txt||'Chưa có nội dung.';
+  document.getElementById('hot'+cap(type)+'Edit').style.display='none';
+  toast('💾 Đã lưu!');
+}
+function renderHots() {
+  ['mic','go','treo'].forEach(t=>{
+    document.getElementById('hot'+cap(t)+'Content').textContent = state.hots[t]||'Chưa có nội dung.';
+  });
+}
+function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+// ══════════════════════════════════════
+//  NOTI WAR
+// ══════════════════════════════════════
+let notiImgData = null;
+
+function openAddNoti() {
+  if (!isLoggedIn()) { toast('Đăng nhập để đăng noti!'); openAuth(); return; }
+  notiImgData=null;
+  document.getElementById('notiImgPreview').style.display='none';
+  document.getElementById('notiImgPreviewText').style.display='';
+  document.getElementById('notiName').value='';
+  document.getElementById('notiDesc').value='';
+  openModal('addNotiModal');
+}
+
+function addNoti() {
+  const name = document.getElementById('notiName').value.trim();
+  const desc = document.getElementById('notiDesc').value.trim();
+  if (!name) { toast('Nhập tên người bị noti!'); return; }
+  const noti = {
+    id:Date.now(), name, desc,
+    img: notiImgData,
+    by: state.currentUser.displayName||state.currentUser.username,
+    time: new Date().toLocaleString('vi-VN')
+  };
+  state.notis.unshift(noti);
+  save('hw_notis', state.notis);
+  closeModal('addNotiModal');
+  renderNotis();
+  toast(`📣 Đã noti "${name}"!`);
+}
+
+function deleteNoti(id) {
+  if (!isAdmin()) return;
+  state.notis = state.notis.filter(n=>n.id!==id);
+  save('hw_notis', state.notis);
+  renderNotis();
+  toast('🗑️ Đã xóa noti');
+}
+
+function renderNotis() {
+  const grid = document.getElementById('notiGrid');
+  const empty = document.getElementById('notiEmpty');
+  if (!state.notis.length) { grid.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  grid.innerHTML = state.notis.map(n=>`
+    <div class="noti-card">
+      <div class="noti-card-img">
+        ${n.img?`<img src="${n.img}" alt="${n.name}" style="width:100%;height:100%;object-fit:cover">` : '📣'}
+      </div>
+      <div class="noti-card-body">
+        <div class="noti-tag">📣 NOTI WAR</div>
+        <div class="noti-name">${n.name}</div>
+        <div class="noti-desc">${n.desc||''}</div>
+      </div>
+      <div class="noti-footer">
+        <span>👤 ${n.by} • 🕐 ${n.time}</span>
+        ${isAdmin()?`<button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="deleteNoti(${n.id})">🗑️ XÓA</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════
+//  ĐỌ DANH
+// ══════════════════════════════════════
+let duel1ImgData=null, duel2ImgData=null;
+let duelTimers={};
+
+function openAddDuel() {
+  if (!isLoggedIn()) { toast('Đăng nhập để tạo trận!'); openAuth(); return; }
+  duel1ImgData=null; duel2ImgData=null;
+  ['duel1Preview','duel2Preview'].forEach(id=>document.getElementById(id).style.display='none');
+  ['duel1ImgText','duel2ImgText'].forEach(id=>document.getElementById(id).style.display='');
+  ['duel1Name','duel1Fb','duel2Name','duel2Fb'].forEach(id=>document.getElementById(id).value='');
+  openModal('addDuelModal');
+}
+
+function addDuel() {
+  const n1=document.getElementById('duel1Name').value.trim();
+  const n2=document.getElementById('duel2Name').value.trim();
+  const fb1=document.getElementById('duel1Fb').value.trim();
+  const fb2=document.getElementById('duel2Fb').value.trim();
+  if (!n1||!n2) { toast('Nhập tên cả 2 người!'); return; }
+  const duel = {
+    id:Date.now(),
+    p1:{name:n1,img:duel1ImgData,fb:fb1,votes:[]},
+    p2:{name:n2,img:duel2ImgData,fb:fb2,votes:[]},
+    by: state.currentUser.displayName||state.currentUser.username,
+    endTime: Date.now()+24*60*60*1000,
+    finished:false
+  };
+  state.duels.unshift(duel);
+  save('hw_duels', state.duels);
+  closeModal('addDuelModal');
+  renderDuels();
+  toast(`⚔️ Trận đọ danh "${n1} vs ${n2}" đã bắt đầu!`);
+}
+
+function voteDuel(duelId, side) {
+  if (!isLoggedIn()) { toast('Đăng nhập để bình chọn!'); openAuth(); return; }
+  const d = state.duels.find(x=>x.id===duelId);
+  if (!d) return;
+  if (d.finished || Date.now()>d.endTime) { toast('Trận đấu đã kết thúc!'); return; }
+  const u = state.currentUser.username;
+  // remove existing vote
+  d.p1.votes = d.p1.votes.filter(v=>v!==u);
+  d.p2.votes = d.p2.votes.filter(v=>v!==u);
+  d[side].votes.push(u);
+  save('hw_duels', state.duels);
+  renderDuels();
+  toast('✅ Đã bình chọn!');
+}
+
+function deleteDuel(id) {
+  if (!isAdmin()) return;
+  state.duels = state.duels.filter(d=>d.id!==id);
+  save('hw_duels', state.duels);
+  clearInterval(duelTimers[id]);
+  delete duelTimers[id];
+  renderDuels();
+  toast('🗑️ Đã xóa trận đấu');
+}
+
+function renderDuels() {
+  const grid = document.getElementById('duelGrid');
+  const empty = document.getElementById('duelEmpty');
+  if (!state.duels.length) { grid.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  grid.innerHTML = state.duels.map(d=>{
+    const v1=d.p1.votes.length, v2=d.p2.votes.length, total=v1+v2||1;
+    const pct1=Math.round(v1/total*100), pct2=100-pct1;
+    const myVote = isLoggedIn() ? (d.p1.votes.includes(state.currentUser.username)?'p1':d.p2.votes.includes(state.currentUser.username)?'p2':null) : null;
+    const ended = d.finished || Date.now()>d.endTime;
+    return `
+    <div class="duel-card">
+      <div class="duel-header">
+        <div class="duel-title">⚔️ ĐỌ DANH · by ${d.by}</div>
+        <div class="duel-timer" id="timer-${d.id}">${ended?'⏱️ KẾT THÚC':'⏳ Đang tải...'}</div>
+        ${isAdmin()?`<button class="btn btn-danger" style="padding:4px 10px;font-size:11px;margin-left:8px" onclick="deleteDuel(${d.id})">🗑️</button>`:''}
+      </div>
+      <div class="duel-arena">
+        <div class="duel-side left">
+          <div class="duel-avatar">
+            ${d.p1.img?`<img class="duel-avatar-img" src="${d.p1.img}">`:`<span style="font-size:40px;line-height:100px;display:block;text-align:center">👤</span>`}
+          </div>
+          <div class="duel-pname">${d.p1.name}</div>
+          ${d.p1.fb?`<a class="duel-fb-link" href="${d.p1.fb}" target="_blank">🔗 Facebook</a>`:''}
+          <div class="duel-votes">${v1}</div>
+          <button class="duel-vote-btn" ${ended?'disabled':''} onclick="voteDuel(${d.id},'p1')" ${myVote==='p1'?'style="background:rgba(0,212,255,0.35)"':''}>
+            ${myVote==='p1'?'✅':'⚡'} BẦU CHỌN
+          </button>
+        </div>
+        <div class="duel-vs">VS</div>
+        <div class="duel-side right">
+          <div class="duel-avatar">
+            ${d.p2.img?`<img class="duel-avatar-img" src="${d.p2.img}">`:`<span style="font-size:40px;line-height:100px;display:block;text-align:center">👤</span>`}
+          </div>
+          <div class="duel-pname">${d.p2.name}</div>
+          ${d.p2.fb?`<a class="duel-fb-link" href="${d.p2.fb}" target="_blank">🔗 Facebook</a>`:''}
+          <div class="duel-votes">${v2}</div>
+          <button class="duel-vote-btn" ${ended?'disabled':''} onclick="voteDuel(${d.id},'p2')" ${myVote==='p2'?'style="background:rgba(255,45,120,0.35)"':''}>
+            ${myVote==='p2'?'✅':'🔥'} BẦU CHỌN
+          </button>
+        </div>
+      </div>
+      <div class="duel-progress">
+        <div class="duel-bar-left" style="width:${pct1}%"></div>
+        <div class="duel-bar-right"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:6px 16px;font-size:11px;color:var(--muted)">
+        <span>${pct1}%</span><span style="color:var(--muted)">Tổng: ${total-1?total:0} phiếu</span><span>${pct2}%</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // timers
+  state.duels.forEach(d=>{
+    clearInterval(duelTimers[d.id]);
+    duelTimers[d.id] = setInterval(()=>{
+      const el = document.getElementById('timer-'+d.id);
+      if (!el) { clearInterval(duelTimers[d.id]); return; }
+      const rem = d.endTime - Date.now();
+      if (rem<=0) {
+        el.textContent='⏱️ KẾT THÚC';
+        clearInterval(duelTimers[d.id]);
+        if (!d.finished) { d.finished=true; save('hw_duels', state.duels); renderDuels(); }
+      } else {
+        const h=Math.floor(rem/3600000);
+        const m=Math.floor((rem%3600000)/60000);
+        const s=Math.floor((rem%60000)/1000);
+        el.textContent=`⏳ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      }
+    },1000);
+  });
+}
+
+// ══════════════════════════════════════
+//  IMG PREVIEW UTILITY
+// ══════════════════════════════════════
+function previewImg(inputId, previewId, textId) {
+  const file = document.getElementById(inputId).files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result;
+    const img = document.getElementById(previewId);
+    img.src = data; img.style.display='block';
+    document.getElementById(textId).style.display='none';
+    // store to the right variable
+    if (inputId==='personImgInput') personImgData=data;
+    else if (inputId==='notiImgInput') notiImgData=data;
+    else if (inputId==='duel1Img') duel1ImgData=data;
+    else if (inputId==='duel2Img') duel2ImgData=data;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══════════════════════════════════════
+//  MODAL HELPERS
+// ══════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('show'); });
+});
+
+// ══════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className='toast'; t.textContent=msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(()=>t.remove(), 4000);
+}
+
+// ══════════════════════════════════════
+//  RENDER ALL
+// ══════════════════════════════════════
+function renderAll() {
+  renderPersons();
+  renderHots();
+  renderNotis();
+  renderDuels();
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+updateHeaderAuth();
+renderAll();
+</script>
+</body>
+</html>
